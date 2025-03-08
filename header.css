@@ -1,0 +1,28 @@
+style{
+    backgroundColor : #e2f1f0;
+}
+
+.button{
+    color: black;
+    height: 45px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 15px;
+    font-family: verdana;
+}
+
+.input{
+    height: 45px;
+    font-size: 15px;
+}
+
+.table{
+    backgroundColor: #e2f1f0;
+}
+
+.tab{
+    background: #e2f1f0;
+    color: #a5b0af;
+    font-size: 30px;
+    font-weight: 600;
+}
