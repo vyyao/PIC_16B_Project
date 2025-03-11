@@ -3,7 +3,6 @@
 
 # In[2]:
 
-
 import aiohttp
 import asyncio
 
@@ -53,6 +52,9 @@ async def fetch_nasa_data(session, lat, lon, start_date, end_date, sem):
 
 # In[3]:
 
+import numpy as np
+import requests
+import pandas as pd
 
 async def get_nasa_power_hourly_data(lat, lon, date=None):
     """
@@ -233,7 +235,10 @@ async def get_nasa_power_data_nearby(lat, lon, date=None, num_locations=10, radi
     return pd.concat(all_data, ignore_index=True) if all_data else None
 
 
-# In[ ]:
+
+
+
+
 
 
 

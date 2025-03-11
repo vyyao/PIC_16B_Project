@@ -1,8 +1,33 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
 
+# In[1]:
+import numpy as np
+import requests
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from plotly import express as px
+import plotly.graph_objs as go
+import datetime
+from datetime import date, datetime, timedelta
+import aiohttp
+import asyncio
+# Dictionary mapping weather attributes to their corresponding line colors for visualization
+attr_colors = {"Temperature (F)": "red", 
+         "Precipitation (in)":"blue", 
+         "Wind Speed (mph)":"green", 
+         "Relative Humidity (%)":"teal", 
+         "Cloud Cover (%)":"grey"}
+
+
+# Dictionary mapping weather attributes to their corresponding line colors for visualization
+attr_colors = {"Temperature (F)": "red", 
+         "Precipitation (in)":"blue", 
+         "Wind Speed (mph)":"green", 
+         "Relative Humidity (%)":"teal", 
+         "Cloud Cover (%)":"grey"}
 
 def plot_hourly(df, attr):
     """
@@ -86,6 +111,11 @@ def plot_mock_heatmap(attr, lat, lon, date=None, num_locations=50, radius_miles=
     Returns:
         fig: A scatter map visualization of the selected weather attribute.
     """
+    from .API_calls import (fetch_nasa_data, get_nasa_power_hourly_data, 
+                        get_nasa_power_hourly_data_years, 
+                        generate_nearby_locations, 
+                        get_nasa_power_data_nearby)
+    
     # Fetch weather data for the generated locations using asyncio
     # use get_nasa_power_data_nearby() to get data for attribute for nearby locations
     weather_data = asyncio.run(get_nasa_power_data_nearby(lat, lon, date, num_locations, radius_miles))
