@@ -307,12 +307,17 @@ dcc.Tab(label='Daily Weather', children=[
 ```
 
 The image below is the default layout of the first tab with directions listed at the top for users and labeled dash objects for ease of navigation. 
+
 <img width="501" alt="Screenshot 2025-03-10 at 5 57 19 PM" src="https://github.com/user-attachments/assets/c790d3ee-1e59-402a-9ba7-c6eed48f5546" />
 
+
 The image below demonstrates the zoom_to_city option and adding a marker for a point of interest to the dashleaflet.Map object. The dcc.DatePickerSingle pop-up is shown at the bottom.
+
 <img width="507" alt="Screenshot 2025-03-10 at 5 57 29 PM" src="https://github.com/user-attachments/assets/de1e7b6c-7262-4365-ab4e-91948ebd5e44" />
 
+
 The image below is the dash_table.DataTable output of the ‘submit’ callback function. Formatted NASA POWER API data is displayed for each hour of the selected day. A caption with the user-selected parameters is printed above the table to remind users what they selected for the table below.
+
 <img width="505" alt="Screenshot 2025-03-10 at 5 57 39 PM" src="https://github.com/user-attachments/assets/20cbb34e-d2c7-4d4d-a1ca-9cd47f5f5176" />
 
 The second tab “Weather Graphs” implements the complex plotly visualizations explained in the earlier section. Users are able to select a weather attribute they wish to visualize over a temporal or spatial scale depending on the graph type they choose. The five options for weather attributes are: "Temperature (F)", "Precipitation (in)", "Wind Speed (mph)", "Relative Humidity (%)", "Cloud Cover (%)". These weather attribute options were selected based on the most common information found on phone weather apps and were also available on the NASA POWER API. The three options for graph types are hourly changes throughout a single day, yearly average changes throughout the past ten years, and the most recent weather information for nearby locations on the specified date. The hourly changes are displayed as a line graph of the weather attribute over time (see `plot_hourly`), the yearly changes are displayed as a boxplot of the weather attribute over time (see `plot_yearly`), and the nearby location data are displayed as a map scatterplot (see `plot_mock_heatmap`). Users click the "submit graph" button to confirm their plot choices. 
@@ -387,11 +392,13 @@ dcc.Tab(label='Weather Predictions', children=[
 ```
 The image below shows the default layout of the “Weather Predictions” tab. Directions and labels are written out for ease of navigation and function use. 
 
+
 <img width="501" alt="Screenshot 2025-03-10 at 6 01 17 PM" src="https://github.com/user-attachments/assets/fb933d14-1260-4efe-a85e-acef3b629526" />
 
 
 
 The image below shows the output produced after clicking the “predict weather” button. Users can also hover over the graph to inspect individual data points on the graph. 
+
 
 <img width="511" alt="Screenshot 2025-03-10 at 6 01 25 PM" src="https://github.com/user-attachments/assets/e4206e01-b022-44ab-a662-724eced80db9" />
 
