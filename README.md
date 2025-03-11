@@ -393,6 +393,8 @@ real, predicted = run_model(df_pred, 'Precipitation (in)', 10, 10)
 graph, pred_df = plot_predictions('Precipitation (in)', real, predicted, 10)
 graph.show()
 ```
+<img width="554" alt="Screenshot 2025-03-11 at 3 42 36 PM" src="https://github.com/user-attachments/assets/b0c965c3-febc-4aaf-a29e-f42cabe3f724" />
+
 <img width="1001" alt="Screenshot 2025-03-11 at 3 41 27 PM" src="https://github.com/user-attachments/assets/b4db75ad-54a6-4f55-bc3b-05ddef841773" />
 
 
