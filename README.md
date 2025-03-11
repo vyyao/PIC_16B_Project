@@ -409,8 +409,8 @@ Our primary objective was to develop a web application that provides Los Angeles
 
 
 # How to run our webapp
-Download ‘final_weather_dash_app.ipynb’
-Download all .py files in  ‘myProject’ folder from repository and keep it all in a folder called ‘myProject’
-Download ‘assets’ folder (includes ‘header.css’, ‘typography.css’, and ‘custom-script.js’) and ‘california_cities_5.csv’
-Put all files together in your desired directory.
-Run all cells in ‘final_weather_dash_app.ipynb’ 
+1. Download ‘final_weather_dash_app.ipynb’
+2. Download all .py files in  ‘myProject’ folder from repository and keep it all in a folder called ‘myProject’
+3. Download ‘assets’ folder (includes ‘header.css’, ‘typography.css’, and ‘custom-script.js’) and ‘california_cities_5.csv’
+4. Put all files together in your desired directory.
+5. Run all cells in ‘final_weather_dash_app.ipynb’ 
