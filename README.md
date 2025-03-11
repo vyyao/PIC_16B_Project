@@ -238,7 +238,7 @@ Once trained, the model is used to predict future weather values.
 - Preparing Test Data:
     - The function extracts the most recent n_past values and scales them using the same MinMaxScaler.
 - Model Prediction:
-    - The trained model predicts n_future worth of values, which are then inverse-transformed to restore the original scale for easier visualizations and more interpretable results/
+    - The trained model predicts n_future worth of values, which are then inverse-transformed to restore the original scale for easier visualizations and more interpretable results.
 
 ```
 def run_model(dataset, feature, n_past=50, n_future=7):
