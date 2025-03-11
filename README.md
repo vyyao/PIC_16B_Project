@@ -384,8 +384,16 @@ def plot_predictions(attr, real, predicted, n_future):
     df = df[["datetime",attr]]
 
     return fig, df
-```
 
+df_pred = await get_nasa_power_hourly_data(34.0722, -118.4427, "20240301")
+# run model
+real, predicted = run_model(df_pred, 'Precipitation (in)', 10, 10)
+
+# Generate the graph and DataFrame with predictions
+graph, pred_df = plot_predictions('Precipitation (in)', real, predicted, 10)
+graph.show()
+```
+<img width="1001" alt="Screenshot 2025-03-11 at 3 41 27 PM" src="https://github.com/user-attachments/assets/b4db75ad-54a6-4f55-bc3b-05ddef841773" />
 
 
 # Dash
