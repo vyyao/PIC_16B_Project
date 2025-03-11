@@ -116,7 +116,8 @@ df = await get_nasa_power_hourly_data(34.0722, -118.4427, "20240301")
 df.head()
 ```
 
-![pic](https://github.com/user-attachments/assets/3150dc90-2d8f-46d8-99da-1f6a08477b63)
+<img width="1271" alt="Screenshot 2025-03-10 at 6 03 56 PM" src="https://github.com/user-attachments/assets/8519be6b-daa2-41d1-a0b9-effb455c7c91" />
+
 
 
 # Complex data visualization using packages beyond matplotlib (plotly)
@@ -164,8 +165,12 @@ def plot_mock_heatmap(attr, lat, lon, date=None, num_locations=50, radius_miles=
     
     # return map visualization
     return fig
+
+# plot precipitation for nearby locations
+plot_mock_heatmap('Precipitation (in)', 34.0722, -118.4427, "20240301")
 ```
-<img width="504" alt="Screenshot 2025-03-10 at 5 55 26 PM" src="https://github.com/user-attachments/assets/0afd3038-550b-41a1-93a7-e9f97d785e8c" />
+<img width="1246" alt="Screenshot 2025-03-10 at 6 03 28 PM" src="https://github.com/user-attachments/assets/bd8267b6-ceb2-4c28-9a76-a44f47aaa32b" />
+
 
 
 # Machine Learning (Keras)
@@ -333,15 +338,19 @@ dcc.Tab(label='Weather Graphs', children=[
 ```
 
 The image below shows the default layout of the “Weather Graphs” tab. There are directions to help users understand how to display a graph and labeled dash objects for ease of navigation.
+
 <img width="504" alt="Screenshot 2025-03-10 at 6 00 36 PM" src="https://github.com/user-attachments/assets/d9bf7574-af1b-4ea2-a18f-54496166cba1" />
 
 The image below is an example of the hourly change in relative humidity for the location and date parameters chosen in the previous tab “Daily Weather.” A caption is provided to remind users of what parameters were used to retrieve NASA POWER API data. 
+
 <img width="505" alt="Screenshot 2025-03-10 at 6 00 44 PM" src="https://github.com/user-attachments/assets/7b942f62-7b29-4cf6-9e76-cd3ec64479ba" />
 
 The image below is an example of the yearly change in relative humidity graph.
+
 <img width="500" alt="Screenshot 2025-03-10 at 6 00 52 PM" src="https://github.com/user-attachments/assets/f86a58a0-c053-41fd-a682-1d03c9eb8841" />
 
 The image below is an example of the spatial comparison of nearby locations’ relative humidity for a given day.
+
 <img width="504" alt="Screenshot 2025-03-10 at 6 01 04 PM" src="https://github.com/user-attachments/assets/ccf9333e-2194-4be7-8df6-4b344077f364" />
 
 The third tab “Weather Predictions” implements the keras machine learning model described in the previous section. Users can type or select a number of hours into the future to predict a given weather attribute. Confirming their choice with the “predict weather” button will output a dash_table.DataTable with the listed hours of the next day and their predicted weather attribute. A plotly line graph is also displayed to compare the 3 days of weather data the model was fitted to and the predicted weather data highlighted in red.
@@ -377,11 +386,13 @@ dcc.Tab(label='Weather Predictions', children=[
 ], className="tab",)
 ```
 The image below shows the default layout of the “Weather Predictions” tab. Directions and labels are written out for ease of navigation and function use. 
+
 <img width="501" alt="Screenshot 2025-03-10 at 6 01 17 PM" src="https://github.com/user-attachments/assets/fb933d14-1260-4efe-a85e-acef3b629526" />
 
 
 
 The image below shows the output produced after clicking the “predict weather” button. Users can also hover over the graph to inspect individual data points on the graph. 
+
 <img width="511" alt="Screenshot 2025-03-10 at 6 01 25 PM" src="https://github.com/user-attachments/assets/e4206e01-b022-44ab-a662-724eced80db9" />
 
 
