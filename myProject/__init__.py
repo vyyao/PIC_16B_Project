@@ -12,12 +12,12 @@ from .API_calls import (fetch_nasa_data, get_nasa_power_hourly_data,
 
 # Import functions from weather_visualization.py
 from .weather_visualization import (plot_hourly, plot_yearly,
-                                   plot_mock_heatmap)
+                                   plot_mock_heatmap,
+                                   plot_heatmap)
 
-# Import functions from keras_weather_model.py
-from .keras_weather_model import (run_model, plot_predictions)
+from .keras_weather_model import (run_model,
+                                  plot_predictions)
 
-# Import functions from app.py
 from .app import (load_app, choose_graph)
 
 # In[ ]:

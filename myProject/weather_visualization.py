@@ -14,6 +14,8 @@ import datetime
 from datetime import date, datetime, timedelta
 import aiohttp
 import asyncio
+from scipy.interpolate import griddata
+
 # Dictionary mapping weather attributes to their corresponding line colors for visualization
 attr_colors = {"Temperature (F)": "red", 
          "Precipitation (in)":"blue", 
@@ -142,6 +144,102 @@ def plot_mock_heatmap(attr, lat, lon, date=None, num_locations=50, radius_miles=
 
 # In[ ]:
 
+def plot_heatmap(attr, lat, lon, date=None, num_locations=50, radius_miles=15):
+    """
+    Fetches weather data for nearby locations, applies interpolation, and overlays a 
+    generated heatmap on a map.
+
+    Args:
+        attr (str): The weather attribute to visualize (e.g., temperature, precipitation).
+        lat (float): Latitude of the central location.
+        lon (float): Longitude of the central location.
+        date (str, optional): Date in "YYYYMMDD" format. Defaults to today.
+        num_locations (int, optional): Number of nearby locations to generate.
+        radius_miles (float, optional): Radius in miles for generating nearby locations.
+
+    Returns:
+        fig: A Mapbox heatmap visualization.
+    """
+    from .API_calls import (fetch_nasa_data, get_nasa_power_hourly_data, 
+                        get_nasa_power_hourly_data_years, 
+                        generate_nearby_locations, 
+                        get_nasa_power_data_nearby)
+    
+    # Fetch weather data asynchronously
+    weather_data = asyncio.run(get_nasa_power_data_nearby(lat, lon, date, num_locations,
+                                                          radius_miles))
+
+    # Extract latitude, longitude, and weather attribute values
+    lats = weather_data["Latitude"].values
+    lons = weather_data["Longitude"].values
+    values = weather_data[attr].values  
+
+    # Define a grid for interpolation
+    # I used 150 x 150 because it seemed like a good balance without causing an error
+    # because there are too many 
+    lat_grid = np.linspace(lats.min(), lats.max(), 150)
+    lon_grid = np.linspace(lons.min(), lons.max(), 150)
+    lon_grid, lat_grid = np.meshgrid(lon_grid, lat_grid)
+
+    # Apply cubic interpolation first
+    interpolated_values = griddata((lats, lons), values, (lat_grid, lon_grid), method='cubic')
+
+    # If cubic fails in some areas, replace NaNs with nearest-neighbor values
+    nearest_values = griddata((lats, lons), values, (lat_grid, lon_grid), method='nearest')
+
+    # Replace NaNs in the interpolated grid
+    interpolated_values = np.where(np.isnan(interpolated_values), nearest_values, interpolated_values)
+
+    # If there are still NaNs (very unlikely), replace them with the median precipitation value
+    if np.isnan(interpolated_values).any():
+        interpolated_values = np.nan_to_num(interpolated_values, nan=np.median(values))
+
+    # Flatten the grids for plotting
+    lat_flat = lat_grid.flatten()
+    lon_flat = lon_grid.flatten()
+    values_flat = interpolated_values.flatten()
+
+    # Create the heatmap layer with a balanced radius
+    fig = go.Figure(go.Densitymapbox(
+        lat=lat_flat, 
+        lon=lon_flat, 
+        z=values_flat, 
+        # Adjust for better blending
+        radius=15,  
+        # add color scale
+        colorscale="viridis", 
+        colorbar_title=f"{attr}",
+        opacity=0.6,    
+    ))
+
+    # Overlay actual data points with hover names
+    fig.add_trace(go.Scattermapbox(
+        lat=lats,
+        lon=lons,
+        mode="markers",
+        marker=dict(size=7, opacity=0.9),  
+        customdata=np.array(values),  
+        hoverinfo="text",
+        hovertemplate=(
+            "<b>Latitude:</b> %{lat}<br>" +
+            "<b>Longitude:</b> %{lon}<br>" +
+            "<b>" + attr + ":</b> %{customdata:.3f} in"
+        ),
+        name="Data Points"
+    ))
+
+    # Configure the Mapbox layout
+    fig.update_layout(
+        mapbox=dict(
+            style="carto-positron",
+            center={"lat": lat, "lon": lon},  
+            zoom=10  
+        ),
+        title=f"{attr} Heatmap",
+        margin={"r":0, "t":50, "l":0, "b":0}
+    )
+
+    return fig
 
 
 
