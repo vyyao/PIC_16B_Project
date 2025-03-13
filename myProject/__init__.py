@@ -12,7 +12,6 @@ from .API_calls import (fetch_nasa_data, get_nasa_power_hourly_data,
 
 # Import functions from weather_visualization.py
 from .weather_visualization import (plot_hourly, plot_yearly,
-                                   plot_mock_heatmap,
                                    plot_heatmap)
 
 from .keras_weather_model import (run_model,
