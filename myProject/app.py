@@ -358,7 +358,7 @@ def load_app():
     
 # END OF AP --------------------------------------------------------------------------------------------------------------------------------------------------
 visual_options = ["Temperature (F)", "Precipitation (in)", "Wind Speed (mph)", "Relative Humidity (%)", "Cloud Cover (%)"]
-graph_options = ["Hourly Change", "Yearly Change", "Local Trends"]
+graph_options = ["Hourly Change", "Yearly Change", "Local Trends", "Heat Map"]
 
 # dictionary with cities and their associated (latitude,longitude) coordinates
 df = pd.read_csv('california_cities_5.csv')
@@ -392,6 +392,8 @@ async def choose_graph(attr, graph_type, lat, lng, day):
         year_df = await get_nasa_power_hourly_data_years(lat, lng, 2014, 2024)
         return plot_yearly(year_df,attr)
 
+    elif graph_type == "Heat Map":
+        return plot_heatmap(attr, lat, lng, day)
     # to plot heatmaps of weather attr in nearby locations 
     else: 
         return plot_mock_heatmap(attr, lat, lng, day, num_locations=50)
