@@ -96,7 +96,6 @@ def plot_yearly(df, attr):
 
 # In[ ]:
 
-from scipy.interpolate import griddata
 
 def plot_heatmap(attr, lat, lon, date=None, num_locations=50, radius_miles=15):
     """
@@ -125,32 +124,35 @@ def plot_heatmap(attr, lat, lon, date=None, num_locations=50, radius_miles=15):
     lons = weather_data["Longitude"].values
     values = weather_data[attr].values  
 
+    print(values)
     # Define a grid for interpolation
-    lat_grid = np.linspace(lats.min(), lats.max(), 150)
-    lon_grid = np.linspace(lons.min(), lons.max(), 150)
+    lat_grid = np.linspace(lats.min(), lats.max(), 100)
+    lon_grid = np.linspace(lons.min(), lons.max(), 100)
     lon_grid, lat_grid = np.meshgrid(lon_grid, lat_grid)
-
-    # Apply cubic interpolation
+    
+    # Apply cubic interpolation to estimate values at new locations on the grid.
+    # Uses real (lat, lon, value) data from get_nasa_power_data_nearby and 
+    # fits a smooth surface across the data points.
     interpolated_values = griddata((lats, lons), values, (lat_grid, lon_grid), method='cubic')
-
-    # Replace NaNs in the interpolated grid with nearest neighbor values
-    nearest_values = griddata((lats, lons), values, (lat_grid, lon_grid), method='nearest')
-    interpolated_values = np.where(np.isnan(interpolated_values), nearest_values, interpolated_values)
+    
 
     # Flatten the grids for plotting
     lat_flat = lat_grid.flatten()
     lon_flat = lon_grid.flatten()
-    values_flat = interpolated_values.flatten()
 
-    # Define color range
-    vmin, vmax = values.min(), values.max()
+    # define color range with value range
+    vmax = values.max()
+    vmin = values.min() - 20
+
 
     # Create the heatmap layer
     fig = go.Figure(go.Densitymapbox(
         lat=lat_flat, 
         lon=lon_flat, 
-        z=values_flat, 
-        radius=15,  
+        z=interpolated_values.flatten(), 
+        # define smoothing area
+        radius=20,  
+        # create color scale bar
         colorscale="viridis", 
         colorbar_title=f"{attr}",
         opacity=0.6,    
@@ -164,20 +166,21 @@ def plot_heatmap(attr, lat, lon, date=None, num_locations=50, radius_miles=15):
         marker=dict(
             size=10,
             # Use the attribute values for color
-            color=values, 
-            # Match heatmap colors
+            color=values,  
             colorscale="viridis", 
             # Normalize color scale
-            cmin=vmin, 
+            cmin=vmin,  
             cmax=vmax,
-            colorbar=dict(title=attr)
-        ), 
-        customdata=np.array(values),  
+        ),
+        # store the values array as custom
+        customdata=np.array(values),
+        # force the hover to be the content of hovertemplate
         hoverinfo="text",
+        # display the lon, lat, and value
         hovertemplate=(
             "<b>Latitude:</b> %{lat}<br>" +
             "<b>Longitude:</b> %{lon}<br>" +
-            "<b>" + attr + ":</b> %{customdata:.3f} in"
+            "<b>" + attr + ":</b> %{customdata}"
         ),
         name="Data Points"
     ))
@@ -187,14 +190,12 @@ def plot_heatmap(attr, lat, lon, date=None, num_locations=50, radius_miles=15):
         mapbox=dict(
             style="carto-positron",
             center={"lat": lat, "lon": lon},  
-            zoom=10  
+            zoom=10.8  
         ),
         title=f"{attr} Heatmap",
     )
 
     return fig
-
-
 
 
 
