@@ -3,26 +3,53 @@ style{
 }
 
 .button{
-    color: black;
-    height: 45px;
-    padding-left: 5px;
-    padding-right: 5px;
+    color: white;
+    background-color: #618f8a;
+    border:none;
+    border-radius: 4px;
+    height: 40px;
     font-size: 15px;
     font-family: verdana;
+    width:100%;
 }
 
 .input{
     height: 45px;
     font-size: 15px;
+    font-family: verdana;
+    border-radius:4px;
+    border:#bbbdbd;
+    border-width: 10px;
+    width:100%;
 }
 
-.table{
-    backgroundColor: #e2f1f0;
+.drop{
+    width:100%;
+    font-size: 15px;
+    height: 40px;
+    border:none;
+}
+
+.SingleDatePickerInput {
+    border: none;
+    height: 30x;
+    font-size:15px;
+    font-family: verdana;
+}
+
+.date{
+    width: 100%;
 }
 
 .tab{
-    background: #e2f1f0;
-    color: #a5b0af;
-    font-size: 30px;
-    font-weight: 600;
+    backgroundColor: #e2f1f0;
+    border: none;
+    font-size: 15px;
+    font-weight: 30;
+    height: 5%;
+}
+
+.DataTable{
+    font-size:15px;
+    font-family: verdana;
 }
