@@ -124,7 +124,6 @@ def plot_heatmap(attr, lat, lon, date=None, num_locations=50, radius_miles=15):
     lons = weather_data["Longitude"].values
     values = weather_data[attr].values  
 
-    print(values)
     # Define a grid for interpolation
     lat_grid = np.linspace(lats.min(), lats.max(), 100)
     lon_grid = np.linspace(lons.min(), lons.max(), 100)
