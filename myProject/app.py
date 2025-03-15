@@ -24,26 +24,36 @@ from dash.dash_table.Format import Format, Scheme, Trim
 import dash_bootstrap_components as dbc
 from myProject import *
 
-# from API_calls import * 
-# from weather_visualization import *
-# from keras_weather_model import *
-
 def load_app():
-    app = Dash()
+    app = Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
     app.title="California Weather"
-    app.layout = html.Div([
+    app.layout = dbc.Container([
         dcc.Tabs([
             # TAB 1 - DAILY WEATHER ---------------------------------------------------------------------------------
-            dcc.Tab(label='Daily Weather', children=[ 
-                dcc.Markdown('''
+            dbc.Tab(label='Daily Weather', children=[ 
+                dbc.Row([dcc.Markdown('''
                     ## Directions: 
                     1. Pan and zoom in/out on the map to find your location.
                     2. Click your location on the map for current weather.
                         Press the "Submit" button to confirm your selection and your weather reuslts will load promptly.
-                    3. Check out the "Weather Graphs" and "Weather Predictions" tabs for more weather information.'''),
-                dcc.Markdown("### Zoom to City"),
-                dcc.Dropdown(list(ca_city_dict.keys()), id="city"),
-                html.Br(),
+                    3. Check out the "Weather Graphs" and "Weather Predictions" tabs for more weather information.'''),]),
+                dbc.Row([
+                    dbc.Col([dcc.Markdown("### Zoom to City"),
+                            dcc.Dropdown(list(ca_city_dict.keys()), id="city",className="drop"),
+                            ], width=4,className="column"),
+                    dbc.Col([dcc.Markdown("### Select Date:"),
+                            dcc.DatePickerSingle(
+                                id='date-picker',
+                                min_date_allowed=date(2000, 1, 1),
+                                max_date_allowed=date(2024, 12, 31),
+                                initial_visible_month=date(2024, 1, 1),
+                                className="date",
+                            ),
+                    ],width=4, className="column"),
+                    dbc.Col([html.Button('Submit',id='submit',n_clicks=0,className="button")]
+                            , align="end",width=3,className="column"),
+                ]),
+                dbc.Row([html.Br(),
                 dcc.Markdown("### Select Location:"),
                 dl.Map( 
                     id='map',
@@ -53,53 +63,57 @@ def load_app():
                     ],
                     center=[34, -118],
                     zoom=9,
-                    style={'height': '50vh'}
+                    style={'height': '50vh','zIndex': 0}
                 ),
-                html.Div(id='coords'),
-                dcc.Markdown("### Select Date:"),
-                dcc.DatePickerSingle(
-                    id='date-picker',
-                    min_date_allowed=date(2000, 1, 1),
-                    max_date_allowed=date(2024, 12, 31),
-                    initial_visible_month=date(2024, 1, 1),
-                ),
-                html.Button('Submit',id='submit',n_clicks=0,className="button"), 
+                html.Div(id='coords'), 
+                html.Br(),
                 dcc.Markdown('## Current Weather:'),
                 dcc.Markdown(id='table-caption'),
                 dash_table.DataTable(id='weather',
                     style_as_list_view=True,
                     style_cell={'padding': '2px'},
                     style_header={
-                        'backgroundColor': 'white',
-                        'fontWeight': 'bold'
+                        'backgroundColor': '#618f8a',
+                        'fontWeight': 'bold',
+                        'font-family': 'verdana',
+                        'color':'white',
+                        'textAlign':'center',
                     },
                     style_cell_conditional=[
                         {'textAlign': 'center'}
                     ],
+                    style_data={'font-family': 'verdana'}
                 ),
                 dcc.Store(id='latitude'), # stored latitude for other tabs/functions
                 dcc.Store(id='longitude'), # stored longitude for other tabs/functions
-                dcc.Store(id='date'), # stored date for other tabs/function
+                dcc.Store(id='date')]), # stored date for other tabs/function]),
             ], className="tab",),
 
             # TAB 2 - WEATHER GRAPHS ---------------------------------------------------------------------------------
             dcc.Tab(label='Weather Graphs', children=[
+                
                 dcc.Markdown('''
                     ## Directions: 
                     1. Select a weather attribute you are interested in.
                     2. Select the type of graph you wish to see.
                     3. Click the "Create Graph" button to confirm your choice. 
                         Your graph will load promptly with weather information from your previously selected location.'''),
-                dcc.Markdown("### Select an Attribute:"),
-                dcc.Dropdown(visual_options,id='options'),
-                dcc.Markdown("### Select a Graph:"),
-                dcc.Dropdown(graph_options,id='graph_type'),
                 html.Br(),
-                html.Br(),
-                html.Button('Create Graph', id='submit-graph', n_clicks=0, className="button"),
+                
+                dbc.Row([
+                    dbc.Col([dcc.Markdown("### Select an Attribute:"),
+                            dcc.Dropdown(visual_options,id='options'),]
+                           , align="end"),
+                    dbc.Col([dcc.Markdown("### Select a Graph:"),
+                            dcc.Dropdown(graph_options,id='graph_type'),]
+                            , align="end"),
+                    dbc.Col([html.Button('Create Graph', id='submit-graph', n_clicks=0, className="button"),]
+                           , align="end"),
+                ]),
+                
                 html.Br(),
                 dcc.Markdown(id='caption'),
-                dcc.Graph(id='visual'),
+                dcc.Graph(id='visual', style={'width': '100%', 'height': '60vh'}),
             ], className="tab",),
 
             # TAB 3 - WEATHER PREDICTIONS ---------------------------------------------------------------------------------
@@ -110,29 +124,38 @@ def load_app():
                     2. Select the number of days into the future you want to be predicted.
                     3. Click the "Predict Weather" button to confirm your choice. 
                         Your graph will load promptly with weather information from your previously selected location.'''),
-                dcc.Markdown("### Select an Attribute:"),
-                dcc.Dropdown(visual_options,id='target'),
-                dcc.Markdown("### Select the Number of Hours to Predict:"),
-                dcc.Input(id='n_future', type="number", className="input"),
-                html.Br(),
-                html.Br(),
-                html.Button('Predict Weather', id='predict-weather', n_clicks=0,className="button"),
+                
+                dbc.Row([
+                    dbc.Col([dcc.Markdown("### Select an Attribute:"),
+                            dcc.Dropdown(visual_options,id='target'),],
+                           align="end"),
+                    dbc.Col([dcc.Markdown("### Select the Number of Hours to Predict:"),
+                            dcc.Input(id='n_future', type="number", className="input"),],
+                           align="end"),
+                    dbc.Col([html.Button('Predict Weather', id='predict-weather', n_clicks=0,className="button")],
+                           align="end"),
+                ]),
+
                 dcc.Markdown(id='pred-caption'),
                 dash_table.DataTable(id='pred-table',
                     style_as_list_view=True,
                     style_cell={'padding': '2px'},
                     style_header={
-                        'backgroundColor': 'white',
-                        'fontWeight': 'bold'
+                        'backgroundColor': '#618f8a',
+                        'fontWeight': 'bold',
+                        'font-family': 'verdana',
+                        'color':'white',
+                        'textAlign':'center',
                     },
                     style_cell_conditional=[
-                        {'textAlign': 'left'}
+                        {'textAlign': 'center'}
                     ],
+                    style_data={'font-family': 'verdana'},
                 ),
-                dcc.Graph(id='pred-graph'),
+                dcc.Graph(id='pred-graph', style={'width': '100%', 'height': '60vh'}),
             ], className="tab",)
-        ])
-    ])
+        ]),
+    ], fluid=True)
 
     # TAB 1 - DAILY WEATHER ---------------------------------------------------------------------------------
     @app.callback(
@@ -203,8 +226,12 @@ def load_app():
 
             # displays warning if location is not chosen before
             if(lat == None or lng == None or day == None):
-                return None, None, None, '##### Please select a location.' # could change to have default location?
+                return None, None, None, '##### Please select a location.'
 
+            # displays warning if date is not chosen
+            if(day==None):
+                return None, None, None, '##### Please select a date.'
+            
             # date to formated date for api call
             chosen_date = date.fromisoformat(day).strftime('%Y%m%d')
 
